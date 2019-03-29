@@ -11,6 +11,7 @@ class UsersController extends Controller
 
     public function __construct() {
 
+//除了这几个动作，其余动作都需要登陆以后才能执行。
         $this->middleware('auth',[
 
                 'except'=>['show','create','store','index']
@@ -92,6 +93,15 @@ class UsersController extends Controller
             session()->flash('success','涓汉璧勬枡鏇存柊鎴愬姛锛?');
 
             return redirect()->route('users.show',$user->id);
+
+    }
+
+    public function destroy(User $user) {
+
+        $this->authorize('destroy',$user);
+        $user->delete();
+        session()->flash('success','成功删除用户');
+        return back();
 
     }
 }
